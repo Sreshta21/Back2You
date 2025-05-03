@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <title>Back2You</title>
+    <style>
+/* General Page Styling */
+/* General Page Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    background: #f4ede6; /* Light Cream Background */
+    color: #5a5a5a; /* Soft Grayish Brown */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #c4b7a6; /* Muted Brown/Beige */
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h3 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.2em;
+    color: #f7f1e3; /* Light Beige */
+}
+
+/* Main Content */
+.main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f4ede6; /* Light Beige */
+    color: #5a5a5a; /* Darker Text for Contrast */
+}
+
+/* Top Bar */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.top-bar h1 {
+    margin: 0;
+    font-size: 2.5em;
+    font-weight: bold;
+    padding-left: 20px;
+    color: #a67c52; /* Warm Brown */
+}
+
+/* Profile Icon */
+.profile-icon {
+    width: 50px;
+    height: 50px;
+    background: #d1c6b8; /* Soft Beige */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 30px;
+}
+
+/* Content */
+.content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 90%;
+    margin: auto;
+}
+
+/* Lost & Found Sections */
+.section {
+    background: #fdf9f3; /* Very Light Cream */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #d19c6b; /* Soft Orange Accent */
+}
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #6d4c41; /* Warm Brown */
+    margin-bottom: 10px;
+}
+/* Confirmation Modal Styling */
+#claimConfirmModal .modal-content {
+  padding: 20px;
+  text-align: center;
+}
+#claimConfirmModal button {
+  margin: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+/* Add Button */
+.add-button {
+    width: 30px;
+    height: 30px;
+    font-size: 1.5em;
+    text-align: center;
+    line-height: 30px;
+    background: #a67c52; /* Warm Brown */
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Items */
+.item-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.item-box {
+    min-width: 150px;
+    min-height: 180px; /* reduced height */
+    padding: 15px;
+    background-color: #ffffff; /* white background */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* light shadow for card effect */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease; /* smooth hover */
+    cursor: pointer; /* makes it feel clickable */
+}
+.item-icon i {
+    font-size: 60px; /* Increase or decrease as needed */
+    margin-bottom: 10px;
+    color: #ff4eb5; /* or any color you like */
+}
+
+.item-image {
+    width: 80px;
+    height: 80px;
+    margin-top: 5px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.item-box.found-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+.item-box.found-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* stronger shadow */
+    transform: translateY(-5px);
+}
+
+.item-icon {
+    font-size: 70px;  /* Larger icon */
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px; /* consistent icon height */
+}
+
+.item-box.found-card h3 {
+  font-size: 60px;
+  margin-bottom: 10px;
+}
+
+.item-date {
+    margin-top: 5px;
+  font-size: 0.9em;
+  color: #444;
+}
+
+
+/* New Button */
+.btn-new {
+    display: block;
+    width: fit-content;
+    margin: 20px auto;
+    padding: 12px 20px;
+    background: #a67c52; /* Warm Brown */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.3s ease;
+}
+
+.btn-new:hover {
+    background: #8a6140; /* Darker Shade */
+}
+
+/* Form Container */
+.form-container {
+    display: none;
+    background: #faf3e3; /* Light Beige */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin: 20px auto;
+}
+
+.form-container h3 {
+    margin-bottom: 10px;
+}
+
+.form-container label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #6d4c41;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: white;
+}
+
+/* Form Button */
+.form-container button {
+    width: 100%;
+    padding: 10px;
+    background: #a67c52;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.form-container button:hover {
+    background: #8a6140;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal Content */
+.modal-content {
+    background: #f4ede6;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    width: 300px;
+    text-align: center;
+}
+
+/* Close Button */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Input Fields */
+.modal-content input {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: white;
+}
+
+/* Submit Button */
+.modal-content button {
+    width: 100%;
+    padding: 10px;
+    background: #a67c52;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.modal-content button:hover {
+    background: #8a6140;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d1c6b8;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f4ede6;
+}
+
+.hidden {
+    display: none;
+}
+
+/* History Section */
+.history-container {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fffaf0;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* History Header */
+.history-header {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #3e2723;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* History Grid Layout */
+.history-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+/* Individual History Item */
+.history-item {
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+    border: 1px solid #eee;
+}
+
+.history-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.18);
+}
+
+/* Item Image */
+.history-item-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+
+/* Item Title */
+.history-item h4 {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #5d4037;
+    margin: 6px 0;
+}
+
+/* Item Date */
+.history-item .history-date {
+    font-size: 0.9em;
+    color: #757575;
+    margin-bottom: 6px;
+    font-style: italic;
+}
+
+/* Status Labels */
+.status {
+    font-size: 0.85em;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-top: 6px;
+    display: inline-block;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Lost Status */
+.status-lost {
+    background: #e74c3c;
+    color: white;
+    border: 1px solid #c0392b;
+    box-shadow: 0 2px 5px rgba(231, 76, 60, 0.4);
+}
+
+/* Found Status */
+.status-found {
+    background: #2ecc71;
+    color: white;
+    border: 1px solid #27ae60;
+    box-shadow: 0 2px 5px rgba(46, 204, 113, 0.4);
+}
+
+/* Responsive Styling */
+@media (max-width: 600px) {
+    .history-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .history-item {
+        padding: 15px;
+    }
+
+    .history-item img {
+        width: 90px;
+        height: 90px;
+    }
+
+    .history-item h4 {
+        font-size: 1.1em;
+    }
+}
+
+.community-popup {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 12px 18px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    font-family: Arial, sans-serif;
+}
+
+
+    </style>
+</head>
+
+<body>
+
+    <!-- History Section -->
+    <div class="history-container">
+        <div class="history-header">History</div>
+        <div class="history-grid" id="historyGrid">
+            <!-- Example History Item -->
+            
+        </div>
+    </div>
+    
+
+    <!-- Main Content -->
+    <div class="main-container">
+        
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <h1>Back2You</h1>
+            <div class="profile-icon">M</div>
+        </div>
+
+<!-- Content -->
+<div class="content">
+
+    <!-- Lost Section -->
+    <div class="section">
+        <div class="section-header">
+            <span>LOST</span>
+            <button class="add-button" onclick="openModal('lostModal')">+</button>
+        </div>
+        <div class="item-container" id="lostContainer">
+            <!-- Items added dynamically here -->
+        </div>
+    </div>
+
+    <!-- Lost Item Modal -->
+    <div id="lostModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('lostModal')">&times;</span>
+            <h2>Add Lost Item</h2>
+
+            <label for="lostItemName">Name of item:</label>
+            <input type="text" id="lostItemName">
+
+            <label for="lostLocation">Where did you last see the item?</label>
+            <input type="text" id="lostLocation">
+
+            <label for="lostDateTime">When did you lose it?</label>
+            <input type="datetime-local" id="lostDateTime">
+
+            <label for="lostItemColor">What color(s) does the item have?</label>
+            <input type="text" id="lostItemColor">
+
+            <label for="lostMarks">Does the item have any unique marks, scratches, or labels?</label>
+            <input type="text" id="lostMarks">
+
+            <label for="lostFeatures">Any additional features that can help identify it?</label>
+            <input type="text" id="lostFeatures">
+
+            <label for="lostItemImage">Upload Image:</label>
+            <input type="file" id="lostItemImage" accept="image/*">
+
+            <label for="lostContactName">Your Name (for contact):</label>
+            <input type="text" id="lostContactName">
+
+            <label for="lostContactPhone">Phone or Email:</label>
+            <input type="text" id="lostContactPhone">
+
+
+            <button onclick="submitLostForm()">Submit</button>
+            <button onclick="closeModal('lostModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Found Section -->
+    <div class="section">
+        <div class="section-header">
+            <span>FOUND</span>
+            <button class="add-button" onclick="openModal('foundModal')">+</button>
+        </div>
+        <div class="item-container" id="foundContainer">
+            <!-- Items added dynamically here -->
+        </div>
+    </div>
+
+    <!-- Found Item Modal -->
+<div id="foundModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('foundModal')">&times;</span>
+      <h2>Add Found Item</h2>
+  
+      <!-- ✅ Wrap everything in a form -->
+      <form id="foundForm" onsubmit="submitFoundForm(event)">
+        <label for="foundItemName">Name of item:</label>
+        <input type="text" id="foundItemName">
+  
+        <label for="foundLocation">Where did you find the item?</label>
+        <input type="text" id="foundLocation">
+  
+        <label for="foundDateTime">When did you find it?</label>
+        <input type="datetime-local" id="foundDateTime" name="foundDateTime" required>
+  
+        <label for="foundItemColor">What color(s) does the item have?</label>
+        <input type="text" id="foundItemColor">
+  
+        <label for="foundMarks">Does the item have any noticeable marks, scratches, or labels?</label>
+        <input type="text" id="foundMarks">
+  
+        <label for="foundFeatures">Are there any extra features that stand out?</label>
+        <input type="text" id="foundFeatures">
+  
+        <label for="foundItemImage">Upload Image:</label>
+        <input type="file" id="foundItemImage" accept="image/*">
+  
+        <label for="foundContactName">Your Name (for contact):</label>
+        <input type="text" id="foundContactName">
+  
+        <label for="foundContactPhone">Phone or Email:</label>
+        <input type="text" id="foundContactPhone">
+  
+        <!-- ✅ This button will now use the form's onsubmit -->
+        <button type="submit">Submit</button>
+      </form>
+  
+      <!-- Cancel button can stay outside the form -->
+      <button type="button" onclick="closeModal('foundModal')">Cancel</button>
+    </div>
+  </div>
+
+</div>
+    </div>
+
+    <!-- Quiz Modal -->
+<div id="quizModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('quizModal')">&times;</span>
+      <h2>Claim Verification Quiz</h2>
+      <p>Answer the following to verify ownership:</p>
+  
+      <label for="quizDate">When was it found?</label>
+      <input type="datetime-local" id="quizDate" />
+  
+      <label for="quizColor">Item Color(s)</label>
+      <input type="text" id="quizColor" />
+
+      <label for="quizLocation">Where was it found?</label>
+      <input type="text" id="quizLocation" />
+
+      <label for="quizMarks">Any Marks / Labels?</label>
+      <input type="text" id="quizMarks" />
+  
+      <label for="quizFeatures">Distinct Features?</label>
+      <input type="text" id="quizFeatures" />
+
+      <label for="claimantName">Your Name:</label>
+      <input type="text" id="claimantName" class="form-control" required />
+      
+      <label for="claimantContact">Your Contact Number:</label>
+      <input type="text" id="claimantContact" class="form-control" required />
+  
+      <button onclick="submitQuiz()">Submit Quiz</button>
+    </div>
+  </div>
+  
+  <!-- Community Name Popup -->
+<div id="communityPopup" class="community-popup">
+    <p><strong>Community:</strong> Jashn Club</p> <!-- Change 'Jashn Club' to your community name -->
+</div>
+
+<!-- Claim Confirmation Dialog -->
+<div id="claimConfirmModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeClaimConfirmModal()">&times;</span>
+    <p>Do you want to claim this item?</p>
+    <button onclick="proceedToClaimQuiz()">Claim</button>
+    <button onclick="closeClaimConfirmModal()">Cancel</button>
+  </div>
+</div>
+
+
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import {getFirestore,collection,addDoc,getDocs,serverTimestamp} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+        import { deleteDoc, } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+        import {getStorage,ref,uploadBytes,getDownloadURL} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-storage.js";
+
+      
+        const firebaseConfig = {
+          apiKey: "AIzaSyBENr6BubSjysGUquwOkzBnNNU3z-4K9N4",
+          authDomain: "back2you-619b1.firebaseapp.com",
+          projectId: "back2you-619b1",
+          storageBucket: "back2you-619b1.appspot.com",
+          messagingSenderId: "589502176156",
+          appId: "1:589502176156:web:137e8aa7e9160b0f4ac659"
+        };
+      
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        // Open Modal when "+" button is clicked
+function openModal(modalId) {
+    document.getElementById(modalId).style.display = "flex";
+}
+
+// Close Modal when clicking the close button (×) or "Cancel"
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = "none";
+}
+
+window.openModal = openModal;
+window.closeModal = closeModal;
+
+
+
+// Submit Lost Item Form
+async function submitLostForm() {
+    const itemName = document.getElementById("lostItemName").value;
+    const location = document.getElementById("lostLocation").value;
+    const dateTime = document.getElementById("lostDateTime").value;
+    const color = document.getElementById("lostItemColor").value;
+    const marks = document.getElementById("lostMarks").value;
+    const features = document.getElementById("lostFeatures").value;
+    const contactName = document.getElementById("lostContactName").value;
+    const contactPhone = document.getElementById("lostContactPhone").value;
+    const imageFile = document.getElementById("lostItemImage").files[0];
+    
+  if (!contactName || !contactPhone) {
+    alert("Please provide your contact info.");
+    return;
+  }
+
+  let imageUrl = "placeholder.webp"; // fallback image
+
+  if (imageFile) {
+    imageUrl = await toBase64(imageFile); // convert image to base64 string
+  }
+    
+    try {
+        await addDoc(collection(db, "lostItems"), {
+            itemName,
+            location,
+            dateTime,
+            color,
+            marks,
+            features,
+            contactName,
+            contactPhone,
+            imageUrl,
+            timestamp: serverTimestamp()
+        });
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Lost Item Added!',
+          text: 'We’ve saved your lost item details.',
+          timer: 2000,
+          showConfirmButton: false
+        });
+
+      closeModal("lostModal");
+      loadLostItems();
+    } catch (error) {
+      console.error("Error uploading lost item ❌", error);
+      alert("Error uploading lost item ❌");
+    }
+  }
+
+  function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
+  async function submitFoundForm(event) {
+  event.preventDefault();
+
+  const itemName = document.getElementById("foundItemName").value;
+  const location = document.getElementById("foundLocation").value;
+  const date = document.getElementById("foundDateTime").value;
+  const color = document.getElementById("foundItemColor").value;
+  const marks = document.getElementById("foundMarks").value;
+  const features = document.getElementById("foundFeatures").value;
+  const contactName = document.getElementById("foundContactName").value;
+  const contactPhone = document.getElementById("foundContactPhone").value;
+  const imageFile = document.getElementById("foundItemImage").files[0];
+
+  if (!contactName || !contactPhone) {
+    alert("Please provide your contact info.");
+    return;
+  }
+
+  let imageUrl = "placeholder.webp"; // fallback
+
+  if (imageFile) {
+    imageUrl = await toBase64(imageFile); // convert image to base64 string
+  }
+
+  try {
+    await addDoc(collection(db, "found_items"), {
+      itemName,
+      location,
+      date,
+      color,
+      marks,
+      features,
+      contactName,
+      contactPhone,
+      imageUrl,
+      foundBy: contactName,
+      createdAt: serverTimestamp()
+    });
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Found Item Added!',
+      text: 'Your item was successfully submitted.',
+      timer: 2000,
+      showConfirmButton: false
+    });
+
+    closeModal("foundModal");
+    document.getElementById("foundForm").reset();
+    loadFoundItems(); // refresh display
+  } catch (error) {
+    console.error("Error adding found item ❌", error);
+    alert("Something went wrong while adding the item!");
+  }
+}
+
+
+// 👇 Expose functions to global scope so HTML buttons can call them
+window.submitLostForm = submitLostForm;
+window.submitFoundForm = submitFoundForm;
+
+
+
+// Function to add an item to Lost/Found section
+function addItemToSection(sectionId, itemName, itemColor, imageURL, status) {
+    let container = document.getElementById(sectionId);
+    let newItem = document.createElement("div");
+    newItem.classList.add("item-box");
+
+    let content = `<p><strong>${itemName}</strong> (${itemColor})</p>`;
+    if (imageURL) {
+        content += `<img src="${imageURL}" alt="Item Image" class="item-image">`;
+    }
+    content += `<span class="status-tag ${status.toLowerCase()}">${status}</span>`;
+
+    newItem.innerHTML = content;
+    container.appendChild(newItem);
+}
+async function loadLostItems() {
+  const lostContainer = document.getElementById("lostContainer");
+  lostContainer.innerHTML = ""; // Clear old content
+
+  const querySnapshot = await getDocs(collection(db, "lostItems"));
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    const itemBox = document.createElement("div");
+    itemBox.classList.add("item-box");
+
+    // ✅ ADD THIS LINE to track item by ID
+    itemBox.setAttribute("data-id", doc.id);
+    // Determine icon
+    const itemName = data.itemName?.toLowerCase() || "";
+    let icon = defaultIcon;
+
+    for (const keyword in iconMap) {
+      if (itemName.includes(keyword)) {
+        icon = iconMap[keyword];
+        break;
+      }
+    }
+
+    const date = data.dateTime || "Unknown date";
+
+    // Build card using <img> instead of <i>
+    itemBox.innerHTML = `
+      <div class="item-icon">
+        <img src="${icon}" alt="icon" class="item-image">
+      </div>
+      <div class="item-info">
+        <p class="item-title">${data.itemName || "Unnamed Item"}</p>
+        <p class="item-date">${date}</p>
+      </div>
+    `;
+
+    itemBox.onclick = () => showLostItemDetails(data, doc.id, itemBox);
+
+    lostContainer.appendChild(itemBox);
+  });
+}
+
+
+
+
+
+
+function showLostItemDetails(data, docId, itemElement) {
+  const details = `
+    📦 Item Name: ${data.itemName}
+    🎨 Color: ${data.color}
+    📍 Location: ${data.location}
+    ✏️ Marks: ${data.marks}
+    💡 Features: ${data.features}
+
+    👤 Contact Person: ${data.contactName}
+    📞 Contact Info: ${data.contactPhone}
+  `;
+
+  Swal.fire({
+    title: 'Lost Item Details',
+    html: `
+      <strong>📦 Item Name:</strong> ${data.itemName}<br>
+      <strong>🎨 Color:</strong> ${data.color}<br>
+      <strong>📍 Location:</strong> ${data.location}<br>
+      <strong>✏️ Marks:</strong> ${data.marks}<br>
+      <strong>💡 Features:</strong> ${data.features}<br><br>
+      <strong>👤 Contact Person:</strong> ${data.contactName}<br>
+      <strong>📞 Contact Info:</strong> ${data.contactPhone}
+    `,
+    icon: 'info',
+    confirmButtonText: 'Return Item',
+    showCancelButton: true,
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Proceed with return logic
+      const itemWithTimestamp = {
+        ...data,
+        returnedAt: new Date().toISOString(),
+        type: "Lost",
+        status: "Returned",
+        imageUrl: data.imageUrl || data.imageURL || "placeholder.webp" // Ensure image URL is added
+      };
+
+      // Add the item to Claim History
+      addDoc(collection(db, "claimHistory"), itemWithTimestamp)
+        .then(() => {
+          // Delete the item from Lost Items
+          deleteDoc(doc(db, "lostItems", docId))
+            .then(() => {
+              itemElement.remove(); // Remove from UI
+              Swal.fire({
+                icon: 'success',
+                title: 'Item Returned!',
+                text: 'Item has been successfully moved to History.',
+                confirmButtonColor: '#3085d6'
+              });
+
+              // Immediately show in history without reload
+              loadHistory();
+            })
+            .catch((err) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Error deleting from Lost Items: ' + err.message
+              });
+            });
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Error adding to Claim History: ' + err.message
+          });
+        });
+    }
+  });
+
+
+    // Add the item to Claim History
+    addDoc(collection(db, "claimHistory"), itemWithTimestamp)
+      .then(() => {
+        // Delete the item from Lost Items
+        deleteDoc(doc(db, "lostItems", docId))
+          .then(() => {
+            itemElement.remove(); // Remove from UI
+            alert("Item returned and moved to History!");
+            loadHistory();
+          })
+          .catch((err) => {
+            alert("Error deleting from Lost Items: " + err.message);
+          });
+      })
+      .catch((err) => {
+        alert("Error adding to Claim History: " + err.message);
+      });
+  }
+
+
+
+
+// Icon map based on item name keywords
+const iconMap = {
+  phone: "assests/iphone.png",
+  wallet: "assests/wallet.png",
+  bag: "assests/backpack.png",
+  keys: "assests/key-chain.png",
+  book: "📚",
+  glasses: "👓",
+  id: "🪪",
+  watch: "⌚",
+  camera:"assests/camera.png",
+  pets: "assests/dog.png",
+  bottle: "assests/water.png"
+};
+const defaultIcon = "assests/unknown.png";
+
+async function loadFoundItems() {
+  const foundContainer = document.getElementById("foundContainer");
+  foundContainer.innerHTML = ""; // clear existing items
+
+  const querySnapshot = await window.getDocs(window.collection(window.db, "found_items"));
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    const itemName = data.itemName.toLowerCase();
+
+    // Determine icon from iconMap
+    let icon = defaultIcon;
+    for (const keyword in iconMap) {
+      if (itemName.includes(keyword)) {
+        icon = iconMap[keyword];
+        break;
+      }
+    }
+
+    const date = data.date || "N/A";
+
+    const itemBox = document.createElement("div");
+    itemBox.classList.add("item-box");
+
+    itemBox.innerHTML = `
+      <img src="${icon}" class="item-image" alt="Item Icon">
+      <p><strong>${data.itemName}</strong></p>
+      <p class="item-date">${date}</p>
+    `;
+
+    itemBox.onclick = () => {
+  currentItemForClaim = { id: doc.id, data };
+
+  Swal.fire({
+    title: 'Do you want to claim this item?',
+    text: 'Please confirm to proceed with the claim quiz.',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, Claim it',
+    cancelButtonText: 'No, Cancel',
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      openModal("quizModal");
+    }
+  });
+};
+
+    foundContainer.appendChild(itemBox);
+  });
+}
+
+
+// Function to add an item to History section
+function addToHistory(itemName, itemColor, imageURL, status) {
+    let historyList = document.getElementById("historyList");
+    let historyItem = document.createElement("li");
+    historyItem.classList.add("history-item");
+
+    let date = new Date().toLocaleDateString();
+    let statusClass = status === "Lost" ? "lost-tag" : "found-tag";
+
+    let content = `
+        <div class="history-entry">
+            <img src="${imageURL}" alt="Item Image" class="history-image">
+            <div class="history-text">
+                <strong>${itemName}</strong> (${itemColor}) - <span class="${statusClass}">${status}</span>
+                <div class="history-date">Added on: ${date}</div>
+            </div>
+        </div>
+    `;
+
+    historyItem.innerHTML = content;
+    historyList.appendChild(historyItem);
+}
+
+let currentItemForClaim = null;
+
+function startQuiz(itemId) {
+  getDoc(doc(db, "found_items", itemId)).then(snapshot => {
+    if (snapshot.exists()) {
+      currentItemForClaim = {
+        id: itemId,
+        data: snapshot.data()
+      };
+      openModal("quizModal");
+    }
+  });
+}
+
+
+
+// Handle quiz form submission and check answers
+async function submitQuiz() {
+  const colorAnswer = document.getElementById("quizColor").value.trim().toLowerCase();
+  const locationAnswer = document.getElementById("quizLocation").value.trim().toLowerCase();
+  const marksAnswer = document.getElementById("quizMarks").value.trim().toLowerCase();
+  const featuresAnswer = document.getElementById("quizFeatures").value.trim().toLowerCase();
+  const claimantName = document.getElementById("claimantName").value.trim();
+  const claimantContact = document.getElementById("claimantContact").value.trim();
+  const actual = currentItemForClaim.data;
+
+  if (!claimantName || !claimantContact) {
+    alert("Please enter your name and contact number to claim the item.");
+    return;
+  }
+
+  if (
+    colorAnswer === actual.color.toLowerCase() &&
+    locationAnswer === actual.location.toLowerCase() &&
+    marksAnswer === actual.marks.toLowerCase() &&
+    featuresAnswer === actual.features.toLowerCase()
+  ) {
+    try {
+      const docRef = await addDoc(collection(db, "claimHistory"), {
+        itemName: actual.itemName,
+        color: actual.color,
+        location: actual.location,
+        marks: actual.marks,
+        features: actual.features,
+        imageURL: actual.imageURL || actual.imageUrl || "placeholder.webp",
+        type: "Found",
+        date: new Date().toLocaleDateString(),
+        claimedOn: new Date().toLocaleDateString(),
+        foundBy: actual.foundBy || "Unknown",
+        foundByContact: actual.contactPhone || "N/A", // If you're storing it
+        claimedBy: claimantName,
+        claimedByContact: claimantContact,
+        status: "Claimed"
+      });
+
+      await deleteDoc(doc(db, "found_items", currentItemForClaim.id));
+
+      Swal.fire({
+  icon: 'success',
+  title: '✅ Claim Verified!',
+  html: `
+    Your answers match! You can now contact the person who found the item:<br><br>
+    <strong>👤 Name:</strong> ${actual.contactName}<br>
+    <strong>📞 Contact:</strong> ${actual.contactPhone}
+  `,
+  confirmButtonColor: '#3085d6'
+});
+
+      closeModal("quizModal");
+
+      loadFoundItems();
+      loadHistory();
+    } catch (err) {
+      console.error("Error claiming item:", err);
+      alert("Something went wrong while claiming the item ❌");
+    }
+  } else {
+    alert("❌ Your answers didn't match the item details.");
+  }
+}
+
+
+// 👇 Make functions global so HTML can call them
+window.startQuiz = startQuiz;
+window.submitQuiz = submitQuiz;
+
+
+async function loadHistory() {
+  const historyGrid = document.getElementById("historyGrid");
+  historyGrid.innerHTML = ""; // Clear existing content
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "claimHistory"));
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+
+      const itemDiv = document.createElement("div");
+      itemDiv.className = "history-item";
+
+      const img = document.createElement("img");
+      img.className = "history-item-image"; // Add your styling class here
+      img.src = data.imageUrl || data.imageURL || "placeholder.webp"; // ✅ Try imageUrl first, fallback to imageURL or placeholder
+      img.alt = "Item Image";
+
+      const title = document.createElement("h4");
+      title.textContent = data.itemName;
+
+      const dateDiv = document.createElement("div");
+      dateDiv.className = "history-date";
+      dateDiv.textContent = `${data.type} on: ${data.date}`;
+
+      const status = document.createElement("span");
+      status.className = "status";
+      status.classList.add(data.type === "Lost" ? "status-lost" : "status-found");
+      status.textContent = data.status;
+
+      // 🔥 Click to show full details
+      itemDiv.onclick = () => {
+        const details = `
+📦 Item Name: ${data.itemName}
+🎨 Color: ${data.color}
+📍 Location: ${data.location}
+✏️ Marks: ${data.marks || "N/A"}
+🔍 Features: ${data.features || "N/A"}
+🧑‍💼 Found By: ${data.foundBy || "N/A"}
+🙋‍♂️ Claimed By: ${data.claimedBy || "N/A"}
+📞 Claimant Contact: ${data.claimedByContact || "N/A"}
+📅 Claimed On: ${data.claimedOn || data.date || "N/A"}
+        `;
+        Swal.fire({
+  title: '📜 History Item Details',
+  html: `
+    <strong>📦 Item Name:</strong> ${data.itemName}<br>
+    <strong>🎨 Color:</strong> ${data.color}<br>
+    <strong>📍 Location:</strong> ${data.location}<br>
+    <strong>✏️ Marks:</strong> ${data.marks}<br>
+    <strong>💡 Features:</strong> ${data.features}<br>
+    <strong>📅 Date:</strong> ${data.date || "N/A"}<br><br>
+    
+    <strong>👤 ${data.type === "Found" ? "Found By" : "Returned By"}:</strong> ${data.foundBy || data.contactName || "N/A"}<br>
+    <strong>📞 Contact:</strong> ${data.foundByContact || data.contactPhone || "N/A"}
+  `,
+  icon: 'info',
+  confirmButtonColor: '#3085d6',
+  confirmButtonText: 'Close'
+});
+
+
+      };
+
+      itemDiv.appendChild(img);
+      itemDiv.appendChild(title);
+      itemDiv.appendChild(dateDiv);
+      itemDiv.appendChild(status);
+
+      historyGrid.appendChild(itemDiv);
+    });
+  } catch (error) {
+    console.error("Error loading history items:", error);
+  }
+}
+
+
+function details(data) {
+  Swal.fire({
+    title: 'Lost Item Details',
+    html: `
+      <strong>📦 Item Name:</strong> ${data.itemName}<br>
+      <strong>🎨 Color:</strong> ${data.color}<br>
+      <strong>📍 Location:</strong> ${data.location}<br>
+      <strong>✏️ Marks:</strong> ${data.marks}<br>
+      <strong>💡 Features:</strong> ${data.features}<br><br>
+      <strong>👤 Contact Person:</strong> ${data.contactName}<br>
+      <strong>📞 Contact Info:</strong> ${data.contactPhone}
+    `,
+    icon: 'info',
+    confirmButtonText: 'Return Item',
+    showCancelButton: true,
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Proceed with return logic
+      const itemWithTimestamp = {
+        ...data,
+        returnedAt: new Date().toISOString(),
+        type: "Lost",
+        status: "Returned"
+      };
+
+      addDoc(collection(db, "claimHistory"), itemWithTimestamp)
+        .then(() => {
+          deleteDoc(doc(db, "lostItems", docId))
+            .then(() => {
+              itemElement.remove();
+
+              Swal.fire({
+                icon: 'success',
+                title: 'Item Returned!',
+                text: 'Item has been successfully moved to History.',
+                confirmButtonColor: '#3085d6'
+              });
+
+              // Optional: immediately show in history without reload
+              loadHistory();
+            })
+            .catch((err) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Error deleting from Lost Items: ' + err.message
+              });
+            });
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Error adding to Claim History: ' + err.message
+          });
+        });
+    }
+  });
+}
+
+let selectedItemForClaim = null; // Temporarily store the clicked item
+
+function showClaimConfirmModal(itemData) {
+  selectedItemForClaim = itemData;
+  document.getElementById("claimConfirmModal").style.display = "block";
+}
+
+function closeClaimConfirmModal() {
+  document.getElementById("claimConfirmModal").style.display = "none";
+}
+
+function proceedToClaimQuiz() {
+  closeClaimConfirmModal();
+  openClaimQuiz(selectedItemForClaim); // Your existing quiz logic
+}
+
+
+// Load posts when the page loads
+window.onload = () => {
+        loadLostItems();
+        loadFoundItems();
+        loadHistory();
+    };
+
+// Close modal if user clicks outside the form
+window.onclick = function (event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = "none";
+    }
+};
+    
+
+        // ✅ Make them available globally
+        window.db = db;
+        window.addDoc = addDoc;
+        window.collection = collection;
+        window.getDocs = getDocs;
+        window.serverTimestamp = serverTimestamp;
+        window.deleteDoc = deleteDoc;
+        window.doc = doc;
+
+        const profileIcon = document.querySelector(".profile-icon");
+const communityPopup = document.getElementById("communityPopup");
+
+profileIcon.addEventListener("click", () => {
+    // Toggle popup display
+    communityPopup.style.display = 
+        communityPopup.style.display === "block" ? "none" : "block";
+});
+
+// Optional: Hide popup when clicking outside
+window.addEventListener("click", function(event) {
+    if (!profileIcon.contains(event.target) && !communityPopup.contains(event.target)) {
+        communityPopup.style.display = "none";
+    }
+});
+
+
+      </script>
+
+
+      
+      
+</body>
+</html>
